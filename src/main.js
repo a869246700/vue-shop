@@ -6,12 +6,12 @@ import './plugins/element.js'
 import 'assets/css/global.css'
 // 导入字体图标
 import 'assets/font/iconfont.css'
-import axios from 'axios'
+// 导入请求
+import request from 'network/request'
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
-Vue.prototype.$http = axios
+Vue.prototype.$http = request
 
 new Vue({
   router,
