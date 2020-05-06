@@ -13,7 +13,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList">
-            <el-button slot="append" icon="el-icon-search" @click="getUserList" />
+            <el-button slot="append" icon="el-icon-search" @click="handleUserListSearch" />
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -309,6 +309,11 @@ export default {
       // 删除成功
       this.$message.success('删除用户成功!')
       // 重新获取用户列表
+      this.getUserList()
+    },
+    // 点击搜索，查询
+    handleUserListSearch() {
+      this.queryInfo.pagenum = 1
       this.getUserList()
     }
   }
