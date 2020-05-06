@@ -133,16 +133,12 @@
       @close="editRoleDialogClose"
     >
       <!-- 内容主题区域 -->
-<<<<<<< HEAD
-      <el-form :model="editRoleForm" :rules="editRoleFormRules" ref="editRoleFormRef" label-width="80px">
-=======
       <el-form
         :model="editRoleForm"
         :rules="editRoleFormRules"
         ref="editRoleFormRef"
         label-width="80px"
       >
->>>>>>> rights
         <el-form-item label="角色名称">
           <el-input v-model="editRoleForm.roleName" disabled></el-input>
         </el-form-item>
@@ -155,9 +151,6 @@
       <!-- 底部区域 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="editRoleVisible = false">取 消</el-button>
-<<<<<<< HEAD
-        <el-button type="primary" @click="handleeditRoleForm">确 定</el-button>
-=======
         <el-button type="primary" @click="handleEditRoleForm">确 定</el-button>
       </span>
     </el-dialog>
@@ -181,7 +174,6 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addRoleDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleAddRoleForm">确 定</el-button>
->>>>>>> rights
       </span>
     </el-dialog>
   </div>
@@ -215,10 +207,7 @@ export default {
       editRoleVisible: false,
       // 当前编辑的角色信息
       editRoleForm: {},
-<<<<<<< HEAD
-=======
       // 编辑角色表单的规则
->>>>>>> rights
       editRoleFormRules: {
         roleDesc: [
           { required: true, message: '请输入角色描述', trigger: 'blur' }
@@ -341,11 +330,7 @@ export default {
       this.editRoleVisible = true
     },
     // 点击修改角色
-<<<<<<< HEAD
-    handleeditRoleForm() {
-=======
     handleEditRoleForm() {
->>>>>>> rights
       this.$refs.editRoleFormRef.validate(async valid => {
         // 判断表单校验结果
         if (!valid) return
@@ -367,11 +352,7 @@ export default {
       })
     },
     // 监听修改角色对话框关闭
-<<<<<<< HEAD
-    editDialogClose() {
-=======
     editRoleDialogClose() {
->>>>>>> rights
       this.$refs.editRoleFormRef.resetFields()
     },
     // 点击删除角色
