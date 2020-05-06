@@ -13,7 +13,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList">
-            <el-button slot="append" icon="el-icon-search" @click="getUserList" />
+            <el-button slot="append" icon="el-icon-search" @click="handleUserListSearch" />
           </el-input>
         </el-col>
         <el-col :span="4">
@@ -352,15 +352,15 @@ export default {
         )
 
         if (res.meta.status !== 200) {
-          return this.$message.error('修改用户失败')
+          return this.$message.error('修改用户失败!')
         }
 
-        // 隐藏修改用户的对话框
-        this.editDialogVisible = false
         // 重新获取用户列表
         this.getUserList()
         // 提示用户更新成功
-        this.$message.success('修改用户成功')
+        this.$message.success('修改用户成功!')
+        // 隐藏修改用户的对话框
+        this.editDialogVisible = false
       })
     },
     // 根据 id 删除对应的用户信息
@@ -432,6 +432,11 @@ export default {
     setRoleDialogClosed() {
       this.selectedRoleId = ''
       this.userInfo = {}
+    },
+    // 点击搜索，查询
+    handleUserListSearch() {
+      this.queryInfo.pagenum = 1
+      this.getUserList()
     }
   }
 }

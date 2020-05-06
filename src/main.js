@@ -8,8 +8,10 @@ import 'assets/css/global.css'
 import 'assets/font/iconfont.css'
 // 导入请求
 import request from 'network/request'
+import TreeTable from 'vue-table-with-tree-grid'
 
 Vue.config.productionTip = false
+Vue.component('tree-table', TreeTable)
 
 Vue.prototype.$http = request
 

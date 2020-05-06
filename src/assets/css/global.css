@@ -1,5 +1,7 @@
 /* 全局样式表 */
-html, body, #app {
+html,
+body,
+#app {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -12,7 +14,7 @@ html, body, #app {
 }
 
 .el-card {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .15)!important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .15) !important;
 }
 
 .el-table {
@@ -23,4 +25,12 @@ html, body, #app {
 .el-pagination {
     text-align: center;
     margin-top: 15px;
+}
+
+.el-cascader-panel {
+    height: 200px!important;
+}
+
+.el-cascader__dropdown {
+    height: 200px!important;
 }
