@@ -88,6 +88,7 @@ export default {
     // 点击退出登录
     handleLogout() {
       window.sessionStorage.removeItem('token')
+      window.sessionStorage.removeItem('activePath')
       this.$router.push('/login')
     },
     // 获取所有菜单
