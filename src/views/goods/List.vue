@@ -1,0 +1,173 @@
+<template>
+  <div>
+    <!-- 面包屑导航 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <!-- 卡片视图区域 -->
+    <el-card>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-input
+            placeholder="请输入内容"
+            v-model="queryInfo.query"
+            clearable
+            @clear="hangleClearInput"
+          >
+            <el-button slot="append" icon="el-icon-search" @click="handleClickSearchGoods"></el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="primary" @click="handleAddGoods">添加商品</el-button>
+        </el-col>
+      </el-row>
+
+      <!-- table表格区域 -->
+      <el-table :data="goodsList" border stripe>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="商品名称" prop="goods_name"></el-table-column>
+        <el-table-column label="商品价格(元)" prop="goods_price" width="100px"></el-table-column>
+        <el-table-column label="商品重量" prop="goods_weight" width="70px"></el-table-column>
+        <el-table-column label="创建时间" prop="add_time" width="140px">
+          <template slot-scope="scope">{{scope.row.add_time | dateFormat}}</template>
+        </el-table-column>
+        <el-table-column label="操作" width="130px">
+          <template slot-scope="scope">
+            <div>
+              <el-button
+                type="primary"
+                size="mini"
+                icon="el-icon-edit"
+                @click="editGoodsDialogShow(scope.row)"
+              ></el-button>
+              <el-button
+                type="danger"
+                size="mini"
+                icon="el-icon-delete"
+                @click="handleDeleteGoodsItem(scope.row.goods_id)"
+              ></el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页操作 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[1, 2, 5, 10]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        background
+      ></el-pagination>
+    </el-card>
+
+    <!-- 编辑商品对话框 -->
+    <el-dialog title="提示" :visible.sync="editGoodsDialogVisible" width="50%">
+      <span>编辑商品信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editGoodsDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editGoodsDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'List',
+  data() {
+    return {
+      // 查询参数
+      queryInfo: {
+        query: '',
+        pagenum: 1,
+        pagesize: 10
+      },
+      // 商品列表
+      goodsList: [],
+      // 商品总数
+      total: 0,
+      // 控制编辑框的显示与隐藏
+      editGoodsDialogVisible: false
+    }
+  },
+  created() {
+    this.getGoodsList()
+  },
+  methods: {
+    // 根据分页获取对应的商品列表
+    async getGoodsList() {
+      const { data: res } = await this.$http.get('goods', {
+        params: this.queryInfo
+      })
+      if (res.meta.status !== 200) {
+        return this.$message.error('获取商品列表失败!')
+      }
+
+      this.goodsList = res.data.goods
+      this.total = res.data.total
+    },
+    // 编辑商品的会话框显示
+    editGoodsDialogShow(goodsItem) {
+      this.editGoodsDialogVisible = true
+    },
+    // 点击删除商品
+    async handleDeleteGoodsItem(id) {
+      const confirmResult = await this.$confirm(
+        '此操作将永久删除该, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).catch(err => err)
+
+      if (confirmResult !== 'confirm') {
+        return this.$message.info('已取消删除')
+      }
+
+      // 执行删除
+      const { data: res } = await this.$http.remove(`goods/${id}`)
+      if (res.meta.status !== 200) {
+        return this.$message.error('删除商品失败!')
+      }
+
+      this.$message.success('删除商品成功!')
+      this.getGoodsList()
+    },
+    // 监听页面大小变化
+    handleSizeChange(newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getGoodsList()
+    },
+    // 监听页码的变化
+    handleCurrentChange(newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getGoodsList()
+    },
+    // 点击查询商品
+    handleClickSearchGoods() {
+      this.pagenum = 1
+      this.getGoodsList()
+    },
+    // 监听搜索框清空
+    hangleClearInput() {
+      this.getGoodsList()
+    },
+    // 点击前往添加商品的界面
+    handleAddGoods() {
+      this.$router.push('/goods/add')
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+</style>
