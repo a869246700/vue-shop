@@ -66,15 +66,6 @@
         background
       ></el-pagination>
     </el-card>
-
-    <!-- 编辑商品对话框 -->
-    <el-dialog title="提示" :visible.sync="editGoodsDialogVisible" width="50%">
-      <span>编辑商品信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editGoodsDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editGoodsDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -92,9 +83,7 @@ export default {
       // 商品列表
       goodsList: [],
       // 商品总数
-      total: 0,
-      // 控制编辑框的显示与隐藏
-      editGoodsDialogVisible: false
+      total: 0
     }
   },
   created() {
@@ -114,9 +103,7 @@ export default {
       this.total = res.data.total
     },
     // 编辑商品的会话框显示
-    editGoodsDialogShow(goodsItem) {
-      this.editGoodsDialogVisible = true
-    },
+    editGoodsDialogShow(goodsItem) {},
     // 点击删除商品
     async handleDeleteGoodsItem(id) {
       const confirmResult = await this.$confirm(
