@@ -38,14 +38,14 @@
             <el-form-item label="商品名称" prop="goods_name">
               <el-input v-model="addForm.goods_name"></el-input>
             </el-form-item>
-            <el-form-item label="商品价格" prop="goods_price" type="number">
-              <el-input v-model="addForm.goods_price"></el-input>
+            <el-form-item label="商品价格(￥)" prop="goods_price">
+              <el-input v-model="addForm.goods_price" type="number" />
             </el-form-item>
-            <el-form-item label="商品重量" prop="goods_weight" type="number">
-              <el-input v-model="addForm.goods_weight"></el-input>
+            <el-form-item label="商品重量" prop="goods_weight">
+              <el-input v-model="addForm.goods_weight" type="number" />
             </el-form-item>
-            <el-form-item label="商品数量" prop="goods_number" type="number">
-              <el-input v-model="addForm.goods_number"></el-input>
+            <el-form-item label="商品数量" prop="goods_number">
+              <el-input v-model="addForm.goods_number" type="number" />
             </el-form-item>
             <el-form-item label="商品分类" prop="goods_cat">
               <!-- 选择商品分类的级联选择框 -->
@@ -117,6 +117,25 @@ import _ from 'lodash'
 export default {
   name: 'Add',
   data() {
+    // 自定义表单校验规则
+    // 价格
+    var validatePrice = (rule, value, callback) => {
+      if (value - 0 < 1) {
+        return callback(new Error('输入价格不能低于1'))
+      }
+    }
+    // 重量
+    var validateWeight = (rule, value, callback) => {
+      if (value - 0 < 1) {
+        return callback(new Error('输入重量不能低于1'))
+      }
+    }
+    // 数量
+    var validateNumber = (rule, value, callback) => {
+      if (value - 0 < 1) {
+        return callback(new Error('输入数量不能低于1'))
+      }
+    }
     return {
       // 步骤的名字信息
       stepName: [
@@ -149,13 +168,16 @@ export default {
           { required: true, message: '请输入商品名称', trigger: 'blur' }
         ],
         goods_price: [
-          { required: true, message: '请输入商品价格', trigger: 'blur' }
+          { required: true, message: '请输入商品价格', trigger: 'blur' },
+          { validator: validatePrice, trigger: 'blur' }
         ],
         goods_weight: [
-          { required: true, message: '请输入商品重量', trigger: 'blur' }
+          { required: true, message: '请输入商品重量', trigger: 'blur' },
+          { validator: validateWeight, trigger: 'blur' }
         ],
         goods_number: [
-          { required: true, message: '请输入商品数量', trigger: 'blur' }
+          { required: true, message: '请输入商品数量', trigger: 'blur' },
+          { validator: validateNumber, trigger: 'blur' }
         ],
         goods_cat: [
           { required: true, message: '请选择商品分类', trigger: 'blur' }
@@ -211,6 +233,21 @@ export default {
       if (oldActiveName === '0' && this.addForm.goods_cat.length !== 3) {
         this.$message.error('请先选择商品分类!')
         // 返回false，则不让tabs切换
+        return false
+      }
+      // 需要先获取动态参数后才能获取静态属性
+      if (activeName !== '1' && this.dynamicParams.length === 0) {
+        this.$message.error('请先获取商品参数!')
+        return false
+      }
+      // 需要先获取静态属性后才能获取商品图片
+      if (activeName - 0 > 2 && this.staticAttrs.length === 0) {
+        this.$message.error('请先获取商品属性!')
+        return false
+      }
+      // 需要先获取商品图片后才能获取商品内容
+      if (activeName - 0 > 3 && this.addForm.pics.length === 0) {
+        this.$message.error('请先提交图片!!')
         return false
       }
     },
